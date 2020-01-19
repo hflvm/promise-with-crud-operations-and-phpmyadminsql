@@ -112,7 +112,7 @@ app.get('/api/doctors', (req, res) => {
 }
 }
 getusers()
-.then(function(rows){
+.then(()=>{
   console.log("getting all users");
 })
 .catch(function(err){
@@ -134,7 +134,7 @@ app.get('/api/doctors/:id', (req, res) => {
 }
 }
 getuser()
-.then(function(rows){
+.then(()=>{
   console.log("getting users");
 })
 .catch(function(err){
@@ -161,7 +161,7 @@ doc.Your_specialty_id]];
 }
 }
 insert()
-.then(function(rows){
+.then(()=>{
   console.log("inserted users");
 })
 .catch(function(err){
@@ -188,7 +188,7 @@ app.put('/api/doctors/:id', (req, res) => {
 }
 }
 update()
-.then(function(rows){
+.then(()=>{
   console.log("update users");
 })
 .catch(function(err){
@@ -210,7 +210,7 @@ app.delete('/api/doctors/:id', (req, res) => {
 }
 }
 deleteing()
-.then(function(rows){
+.then(()=>{
   console.log("deleteing users");
 })
 .catch(function(err){
