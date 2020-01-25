@@ -78,7 +78,7 @@ function connection(){
    function fn(resolve,reject){
      mysqlConnection.connect((err) => {
          if (err)
-             return reject('DB connection failed \n Error : ' + err);
+             return reject(new erorr ('DB connection failed \n Error : ' + err));
          else{
            return resolve('DB connection succeded.');
          }
@@ -101,12 +101,12 @@ app.listen(port , ()=>console.log(`listening on port ${port}`));
 function getusers(){
   return new Promise(fn);
    function fn(resolve,reject){
-app.get('/api/doctors', (req, res) => {
-    mysqlConnection.query('SELECT doctor.*,specialty.name_specialty as specialty_name FROM specialty INNER JOIN doctor ON specialty.id_specialty = doctor.Your_specialty_id', (err, rows, fields) => {
+app.get('/api/doctors', async (req, res) => {
+     await  mysqlConnection.query('SELECT doctor.*,specialty.name_specialty as specialty_name FROM specialty INNER JOIN doctor ON specialty.id_specialty = doctor.Your_specialty_id', (err, rows, fields) => {
         if (!err)
           return resolve(res.send(rows));
         else
-            return reject(err);
+            return reject(new erorr ("error => "+err));
     })
 });
 }
@@ -123,12 +123,12 @@ getusers()
 function getuser(){
   return new Promise(fn);
    function fn(resolve,reject){
-app.get('/api/doctors/:id', (req, res) => {
-    mysqlConnection.query('SELECT * FROM doctor WHERE DocID = ?', [req.params.id], (err, rows, fields) => {
+app.get('/api/doctors/:id', async (req, res) => {
+   await mysqlConnection.query('SELECT * FROM doctor WHERE DocID = ?', [req.params.id], (err, rows, fields) => {
       if (!err)
         return resolve(res.send(rows));
       else
-          return reject(err);
+          return reject(new erorr ("error => "+err));
     })
 });
 }
@@ -145,17 +145,17 @@ getuser()
 function insert(){
   return new Promise(fn);
    function fn(resolve,reject){
-app.post('/api/doctors', (req, res) => {
+app.post('/api/doctors', async (req, res) => {
     let doc = req.body;
     var sql = "INSERT INTO doctor(DocUsername,DocPassword,DocEmail,DocPhone,DocAddress,DocIDCard,DocFullName,Your_specialty_id) VALUES ?";
 var values =[[doc.DocUsername,doc.DocPassword,doc.DocEmail,
 doc.DocPhone,doc.DocAddress,doc.DocIDCard,doc.DocFullName,
 doc.Your_specialty_id]];
-    mysqlConnection.query(sql, [values], (err, rows, fields) => {
+  await  mysqlConnection.query(sql, [values], (err, rows, fields) => {
       if (!err)
         return resolve(res.send("inserted users"));
       else
-          return reject(err);
+          return reject(new erorr ("error => "+err));
     })
 });
 }
@@ -172,11 +172,11 @@ insert()
 function update(){
   return new Promise(fn);
    function fn(resolve,reject){
-app.put('/api/doctors/:id', (req, res) => {
+app.put('/api/doctors/:id', async (req, res) => {
     let doc = req.body;
     var sql = "UPDATE doctor SET DocUsername = ?,DocPassword = ?,DocEmail = ?,DocPhone = ?,DocAddress = ?,DocIDCard = ?,DocFullName = ?,Your_specialty_id = ? WHERE DocID = ?";
 
-    mysqlConnection.query(sql, [doc.DocUsername,doc.DocPassword,doc.DocEmail,
+  await  mysqlConnection.query(sql, [doc.DocUsername,doc.DocPassword,doc.DocEmail,
     doc.DocPhone,doc.DocAddress,doc.DocIDCard,doc.DocFullName,
     doc.Your_specialty_id,req.params.id], (err, rows, fields) => {
       if (!err)
@@ -199,12 +199,12 @@ update()
 function deleteing(){
   return new Promise(fn);
    function fn(resolve,reject){
-app.delete('/api/doctors/:id', (req, res) => {
-    mysqlConnection.query('DELETE FROM doctor WHERE DocID = ?', [req.params.id], (err, rows, fields) => {
+app.delete('/api/doctors/:id', async (req, res) => {
+  await  mysqlConnection.query('DELETE FROM doctor WHERE DocID = ?', [req.params.id], (err, rows, fields) => {
       if(!err)
       return resolve(res.send("deleteing users"));
     else
-        return reject(err);
+        return reject(new erorr ("error => "+err));
     })
 });
 }
@@ -216,4 +216,6 @@ deleteing()
 .catch(function(err){
   console.log(err);
   });
+//---------------------------------------------------------------------------------------------------------
+
 //---------------------------------------------------------------------------------------------------------
